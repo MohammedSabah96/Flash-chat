@@ -48,7 +48,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: animation.value * 100,
+                    height: animation.value * 80,
                   ),
                 ),
                 TypewriterAnimatedTextKit(
@@ -56,7 +56,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   speed: Duration(milliseconds: 500),
                   text: ['Flash Chat'],
                   textStyle: TextStyle(
-                    fontSize: controller.value * 45,
+                    fontSize: controller.value * 35,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
