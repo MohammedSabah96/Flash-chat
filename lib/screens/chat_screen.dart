@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,6 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _fireStore.collection('messages').add({
                         'text': messageText,
                         'sender': loggedInUser.email,
+                        'time': DateTime.now(),
                       });
                     },
                     child: Text(
@@ -114,12 +116,15 @@ class MessagesStream extends StatelessWidget {
         for (var message in messages) {
           final textMessage = message.data['text'];
           final senderMessage = message.data['sender'];
+          final messageTime = message.data['time'];
           final messageBubble = MessageBubble(
             text: textMessage,
             sender: senderMessage,
+            time: messageTime,
             isMe: loggedInUser.email == senderMessage,
           );
           messageBubbles.add(messageBubble);
+          messageBubbles.sort((a, b) => b.time.compareTo(a.time));
         }
         return Expanded(
           child: ListView(
@@ -136,8 +141,9 @@ class MessagesStream extends StatelessWidget {
 class MessageBubble extends StatelessWidget {
   final String text;
   final String sender;
+  final Timestamp time;
   final bool isMe;
-  MessageBubble({this.text, this.sender, this.isMe});
+  MessageBubble({this.text, this.sender, this.isMe, this.time});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -147,7 +153,7 @@ class MessageBubble extends StatelessWidget {
             isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         children: <Widget>[
           Text(
-            sender,
+            '$sender ${time.toDate()}',
             style: TextStyle(
               fontSize: 12.0,
               color: Colors.black54,
